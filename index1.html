@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VOTEZILLA - Online Voting System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+font-family:Arial;
+margin:0;
+background:#f4f6f9;
+text-align:center;
+}
+
+header{
+background:#1e3a8a;
+color:white;
+padding:15px;
+}
+
+nav{
+background:#0f172a;
+padding:10px;
+}
+
+nav button{
+margin:5px;
+padding:8px 15px;
+border:none;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+.section{
+display:none;
+padding:20px;
+}
+
+.active{
+display:block;
+}
+
+.box{
+background:white;
+width:320px;
+margin:auto;
+padding:20px;
+box-shadow:0 0 10px gray;
+}
+
+input{
+width:90%;
+padding:8px;
+margin:5px;
+}
+
+button.action{
+padding:10px;
+margin-top:10px;
+background:green;
+color:white;
+border:none;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>VOTEZILLA</h1>
+<p>Secure • Transparent • Easy</p>
+</header>
+
+<nav>
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('register')">Register</button>
+<button onclick="showPage('login')">Login</button>
+<button onclick="showPage('vote')">Vote</button>
+<button onclick="showPage('result')">Result</button>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="section active">
+<h2>Welcome to Online Voting</h2>
+<p>Cast your vote safely from anywhere</p>
+<button onclick="showPage('login')">Vote Now</button>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="section">
+<div class="box">
+<h2>Register</h2>
+
+<input type="text" id="r_username" placeholder="Username">
+<input type="email" id="r_email" placeholder="Email">
+<input type="text" id="r_aadhar" placeholder="Aadhaar">
+<input type="text" id="r_voter" placeholder="Voter ID">
+<input type="date" id="r_dob">
+<input type="password" id="r_password" placeholder="Password">
+
+<button class="action" onclick="register()">Register</button>
+<p id="r_msg"></p>
+</div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section">
+<div class="box">
+<h2>Login</h2>
+
+<input type="text" id="l_username" placeholder="Username">
+<input type="text" id="l_aadhar" placeholder="Aadhaar">
+<input type="text" id="l_voter" placeholder="Voter ID">
+<input type="password" id="l_password" placeholder="Password">
+
+<button class="action" onclick="login()">Login</button>
+<p id="l_msg"></p>
+</div>
+</div>
+
+<!-- VOTE -->
+<div id="vote" class="section">
+<div class="box">
+<h2>Cast Vote</h2>
+
+<button onclick="vote('Party A')">Party A</button>
+<button onclick="vote('Party B')">Party B</button>
+<button onclick="vote('Party C')">Party C</button>
+
+</div>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="section">
+<div class="box">
+<h2>Results</h2>
+
+<p>Party A: <span id="a"></span></p>
+<p>Party B: <span id="b"></span></p>
+<p>Party C: <span id="c"></span></p>
+
+</div>
+</div>
+
+<script>
+
+// PAGE SWITCH
+function showPage(page){
+document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active'));
+document.getElementById(page).classList.add('active');
+
+if(page === 'result') loadResults();
+}
+
+// REGISTER
+function register(){
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+let newUser = {
+username: r_username.value,
+email: r_email.value,
+aadhar: r_aadhar.value,
+voter: r_voter.value,
+dob: r_dob.value,
+password: r_password.value
+};
+
+// Aadhaar check
+for(let u of users){
+if(u.aadhar === newUser.aadhar){
+r_msg.innerHTML = "❌ Aadhaar already used";
+return;
+}
+}
+
+users.push(newUser);
+localStorage.setItem("users", JSON.stringify(users));
+
+r_msg.innerHTML = "✅ Registered";
+}
+
+// LOGIN
+function login(){
+let users = JSON.parse(localStorage.getItem("users")) || [];
+
+for(let u of users){
+if(l_username.value===u.username &&
+   l_aadhar.value===u.aadhar &&
+   l_voter.value===u.voter &&
+   l_password.value===u.password){
+
+localStorage.setItem("loggedUser", u.username);
+l_msg.innerHTML="✅ Login Success";
+showPage('vote');
+return;
+}
+}
+
+l_msg.innerHTML="❌ Invalid";
+}
+
+// VOTE
+function vote(party){
+let user = localStorage.getItem("loggedUser");
+
+if(!user){
+alert("Login first");
+return;
+}
+
+if(localStorage.getItem(user+"_voted")){
+alert("Already voted");
+showPage('result');
+return;
+}
+
+localStorage.setItem(user+"_voted", true);
+
+let count = localStorage.getItem(party) || 0;
+count++;
+localStorage.setItem(party, count);
+
+alert("Vote successful!");
+showPage('result');
+}
+
+// RESULTS
+function loadResults(){
+a.innerText = localStorage.getItem("Party A") || 0;
+b.innerText = localStorage.getItem("Party B") || 0;
+c.innerText = localStorage.getItem("Party C") || 0;
+}
+
+</script>
+
+</body>
+</html>
