@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register Page</title>
+<style>
+body{
+font-family:Arial;
+background:#f0f8ff;
+text-align:center;
+}
+.box{
+background:aqua;
+width:350px;
+margin:auto;
+margin-top:40px;
+padding:20px;
+box-shadow:0 0 10px gray;
+}
+input{
+width:90%;
+padding:8px;
+margin:5px;
+}
+button{
+padding:10px;
+background:green;
+color:white;
+border:none;
+cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>Register</h2>
+
+<input type="text" id="username" placeholder="Username"><br>
+<input type="email" id="email" placeholder="Email"><br>
+<input type="text" id="aadhar" placeholder="Aadhaar No"><br>
+<input type="text" id="voter" placeholder="Voter ID"><br>
+<input type="date" id="dob"><br>
+<input type="password" id="password" placeholder="Password"><br>
+
+<button onclick="register()">Register</button>
+
+<p id="msg"></p>
+
+<a href="loginpage5.html">Go to Login</a>
+
+</div>
+
+<script>
+function register(){
+
+let users=JSON.parse(localStorage.getItem("users")) || [];
+
+let newUser={
+username:username.value,
+email:email.value,
+aadhar:aadhar.value,
+voter:voter.value,
+dob:dob.value,
+password:password.value
+};
+
+/* Aadhaar unique check */
+for(let i=0;i<users.length;i++){
+if(users[i].aadhar===newUser.aadhar){
+msg.innerHTML="❌ Aadhaar already used";
+return;
+}
+}
+
+users.push(newUser);
+localStorage.setItem("users",JSON.stringify(users));
+
+msg.innerHTML="✅ Registered Successfully";
+
+}
+</script>
+
+</body>
+</html>

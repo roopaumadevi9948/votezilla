@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+body{font-family:Arial;text-align:center;background:#fff0f5;}
+.box{background:pink;width:350px;margin:auto;margin-top:50px;padding:20px;box-shadow:0 0 10px gray;}
+input{width:90%;padding:8px;margin:5px;}
+button{padding:10px;background:blue;color:white;border:none;}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>Login</h2>
+
+<input type="text" id="username" placeholder="Username"><br>
+<input type="text" id="aadhar" placeholder="Aadhar No"><br>
+<input type="text" id="voter" placeholder="Voter ID"><br>
+<input type="password" id="password" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+
+<p id="msg"></p>
+
+<a href="vote1.html">New User vote</a>
+</div>
+
+<script>
+function login(){
+
+let users=JSON.parse(localStorage.getItem("users"));
+
+for(let i=0;i<users.length;i++){
+
+if(username.value===users[i].username &&
+   aadhar.value===users[i].aadhar &&
+   voter.value===users[i].voter &&
+   password.value===users[i].password){
+
+msg.innerHTML="✅ VALID";
+return;
+}
+
+}
+
+msg.innerHTML="❌ INVALID";
+
+}
+</script>
+
+</body>
+</html>

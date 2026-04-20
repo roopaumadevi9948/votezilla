@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Vote Page</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f0f0f0;
+text-align:center;
+}
+
+.box{
+background:white;
+width:300px;
+margin:100px auto;
+padding:20px;
+box-shadow:0 0 10px gray;
+}
+
+button{
+padding:10px;
+margin:5px;
+width:200px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="box">
+<h2>Cast Your Vote</h2>
+
+<button onclick="vote('Party A')">Vote Party A</button>
+<button onclick="vote('Party B')">Vote Party B</button>
+<button onclick="vote('Party C')">Vote Party C</button>
+
+<br><br>
+<a href="result.html">View Results</a>
+
+</div>
+
+<script>
+let username = localStorage.getItem("loggedUser");
+
+if(localStorage.getItem(username+"_voted")){
+alert("You already voted!");
+window.location="result.html";
+}
+
+function vote(party){
+
+localStorage.setItem(username+"_voted",true);
+
+let count = localStorage.getItem(party);
+if(count==null){
+count=0;
+}
+
+count++;
+localStorage.setItem(party,count);
+
+alert("Vote casted successfully!");
+window.location="result.html";
+}
+</script>
+
+</body>
+</html>
